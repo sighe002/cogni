@@ -23,7 +23,7 @@ Other controls: **N** new game, **H** hint (3 per game), **S** sound on/off, **E
 
 The AI only sees what a human opponent would: its own hits/misses, which ships have been sunk, and the sizes of ships still afloat. It never reads your ship positions.
 
-In 150 simulated games each, the average shots needed to sink a fleet are roughly Beginner ~63, Veteran ~55, Admiral ~45.
+In 150 simulated games each, the average shots needed to sink a fleet are roughly Beginner ~63, Veteran ~50, Admiral ~45.
 
 ## Run locally
 
