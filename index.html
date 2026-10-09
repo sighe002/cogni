@@ -4,62 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retro Battleship AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700&family=Press+Start+2P&family=VT323&display=swap">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect width=%2716%27 height=%2716%27 fill=%27%23000080%27/%3E%3Crect x=%272%27 y=%279%27 width=%2712%27 height=%273%27 fill=%27%23c0c0c0%27/%3E%3Crect x=%276%27 y=%276%27 width=%274%27 height=%273%27 fill=%27%23ffff55%27/%3E%3C/svg%3E">
 </head>
 <body>
-    <div class="game-window">
-        <!-- Dashboard Console -->
+    <main class="game-window">
+        <h1 class="title">BATTLESHIP</h1>
+
         <div class="top-console">
             <div class="console-box button-inset"><span class="highlight-text">Player</span></div>
-            <div class="connector-pipe"><div class="indicator-green"></div></div>
-            <div class="console-box button-inset"><span class="highlight-text">Beginner</span></div>
-            <div class="connector-pipe"><div class="indicator-dark"></div></div>
+            <div class="connector-pipe"><div id="player-light" class="indicator" title="Your turn"></div></div>
+            <button id="difficulty-btn" class="console-box button-inset" type="button" title="Change AI difficulty (D)">
+                <span id="difficulty-label" class="highlight-text">Veteran</span>
+            </button>
+            <div class="connector-pipe"><div id="ai-light" class="indicator" title="Computer's turn"></div></div>
             <div class="console-box button-inset"><span class="highlight-text">Computer</span></div>
         </div>
 
-        <div class="status-alert" id="turn-display">YOUR TURN</div>
+        <div class="status-alert" id="turn-display" aria-live="polite">DEPLOY YOUR FLEET</div>
 
-        <!-- The Maps -->
         <div class="boards-container">
-            <!-- Player Board Arena -->
-            <div class="board-wrapper">
-                <div class="coordinate-col-header">
-                    <div></div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
-                </div>
-                <div class="board-with-row-labels">
-                    <div class="coordinate-row-header">
-                        <div>A</div><div>B</div><div>C</div><div>D</div><div>E</div><div>F</div><div>G</div><div>H</div><div>I</div><div>J</div>
-                    </div>
-                    <div id="player-board" class="board"></div>
-                </div>
-                <h2 class="board-label">Player Arena</h2>
-            </div>
+            <section class="board-wrapper">
+                <div id="player-board" class="board" role="grid" aria-label="Your fleet"></div>
+                <h2 class="board-label">Your Fleet</h2>
+                <ul id="player-fleet" class="fleet-list"></ul>
+            </section>
+            <section class="board-wrapper">
+                <div id="ai-board" class="board locked" role="grid" aria-label="Enemy waters"></div>
+                <h2 class="board-label">Enemy Waters</h2>
+                <ul id="ai-fleet" class="fleet-list"></ul>
+            </section>
+        </div>
 
-            <!-- Enemy Board Arena -->
-            <div class="board-wrapper">
-                <div class="coordinate-col-header">
-                    <div></div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
-                </div>
-                <div class="board-with-row-labels">
-                    <div class="coordinate-row-header">
-                        <div>A</div><div>B</div><div>C</div><div>D</div><div>E</div><div>F</div><div>G</div><div>H</div><div>I</div><div>J</div>
-                    </div>
-                    <div id="ai-board" class="board"></div>
-                </div>
-                <h2 class="board-label">Computer Grid</h2>
+        <div id="placement-panel" class="placement-panel">
+            <div id="placement-text" class="placement-text"></div>
+            <div class="placement-buttons">
+                <button id="rotate-btn" class="classic-btn small" type="button"><u>R</u>otate</button>
+                <button id="random-btn" class="classic-btn small" type="button">R<u>a</u>ndom</button>
+                <button id="clear-btn" class="classic-btn small" type="button"><u>C</u>lear</button>
+                <button id="start-btn" class="classic-btn small primary" type="button" disabled>Start Battle</button>
             </div>
         </div>
 
-        <div id="status-message" class="ticker-box inset-panel">CLICK ON THE COMPUTER GRID TO FIRE!</div>
+        <div id="status-message" class="ticker-box" aria-live="polite"></div>
+        <div class="log-row">
+            <ol id="battle-log" class="battle-log"></ol>
+            <div id="stats" class="stats"></div>
+        </div>
 
-        <!-- Classic DOS bottom buttons -->
         <div class="bottom-controls">
-            <button id="restart-btn" class="classic-btn"><u>N</u>ew</button>
-            <button class="classic-btn"><u>H</u>int</button>
-            <button class="classic-btn"><u>S</u>ound</button>
-            <button class="classic-btn"><u>E</u>xit</button>
+            <button id="new-btn" class="classic-btn" type="button"><u>N</u>ew</button>
+            <button id="hint-btn" class="classic-btn" type="button"><u>H</u>int</button>
+            <button id="sound-btn" class="classic-btn" type="button"><u>S</u>ound</button>
+            <button id="exit-btn" class="classic-btn" type="button"><u>E</u>xit</button>
+        </div>
+        <p class="help-text">Keys: R rotate &middot; A random fleet &middot; C clear &middot; Enter start &middot; D difficulty &middot; N new &middot; H hint &middot; S sound &middot; E surrender</p>
+    </main>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-box">
+            <div class="modal-titlebar" id="modal-title"></div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-buttons" id="modal-buttons"></div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script src="js/engine.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
