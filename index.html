@@ -3,27 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battleship vs AI</title>
+    <title>Retro Battleship AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Battleship</h1>
-        <div class="game-info">
-            <p id="turn-display">Your Turn</p>
-            <button id="restart-btn">Restart Game</button>
+    <div class="game-window">
+        <!-- Dashboard Console -->
+        <div class="top-console">
+            <div class="console-box button-inset"><span class="highlight-text">Player</span></div>
+            <div class="connector-pipe"><div class="indicator-green"></div></div>
+            <div class="console-box button-inset"><span class="highlight-text">Beginner</span></div>
+            <div class="connector-pipe"><div class="indicator-dark"></div></div>
+            <div class="console-box button-inset"><span class="highlight-text">Computer</span></div>
         </div>
+
+        <div class="status-alert" id="turn-display">YOUR TURN</div>
+
+        <!-- The Maps -->
         <div class="boards-container">
+            <!-- Player Board Arena -->
             <div class="board-wrapper">
-                <h2>Your Fleet</h2>
-                <div id="player-board" class="board"></div>
+                <div class="coordinate-col-header">
+                    <div></div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
+                </div>
+                <div class="board-with-row-labels">
+                    <div class="coordinate-row-header">
+                        <div>A</div><div>B</div><div>C</div><div>D</div><div>E</div><div>F</div><div>G</div><div>H</div><div>I</div><div>J</div>
+                    </div>
+                    <div id="player-board" class="board"></div>
+                </div>
+                <h2 class="board-label">Player Arena</h2>
             </div>
+
+            <!-- Enemy Board Arena -->
             <div class="board-wrapper">
-                <h2>Enemy Fleet</h2>
-                <div id="ai-board" class="board"></div>
+                <div class="coordinate-col-header">
+                    <div></div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
+                </div>
+                <div class="board-with-row-labels">
+                    <div class="coordinate-row-header">
+                        <div>A</div><div>B</div><div>C</div><div>D</div><div>E</div><div>F</div><div>G</div><div>H</div><div>I</div><div>J</div>
+                    </div>
+                    <div id="ai-board" class="board"></div>
+                </div>
+                <h2 class="board-label">Computer Grid</h2>
             </div>
         </div>
-        <div id="status-message">Click on the Enemy Fleet to fire!</div>
+
+        <div id="status-message" class="ticker-box inset-panel">CLICK ON THE COMPUTER GRID TO FIRE!</div>
+
+        <!-- Classic DOS bottom buttons -->
+        <div class="bottom-controls">
+            <button id="restart-btn" class="classic-btn"><u>N</u>ew</button>
+            <button class="classic-btn"><u>H</u>int</button>
+            <button class="classic-btn"><u>S</u>ound</button>
+            <button class="classic-btn"><u>E</u>xit</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

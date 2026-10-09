@@ -11,7 +11,7 @@ let playerBoard = [];
 let aiBoard = [];
 let isPlayerTurn = true;
 let gameOver = false;
-let aiTargets = []; // For smart AI hunting
+let aiTargets = []; 
 
 function initBoard() {
     return Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(0));
@@ -84,8 +84,8 @@ function startGame() {
     aiTargets = [];
     isPlayerTurn = true;
     gameOver = false;
-    document.getElementById('status-message').innerText = "Click on the Enemy Fleet to fire!";
-    document.getElementById('turn-display').innerText = "Your Turn";
+    document.getElementById('status-message').innerText = "CLICK ON THE COMPUTER GRID TO FIRE!";
+    document.getElementById('turn-display').innerText = "YOUR TURN";
     
     renderBoard('player-board', playerBoard, false);
     renderBoard('ai-board', aiBoard, true, handlePlayerAttack);
@@ -96,11 +96,11 @@ function handlePlayerAttack(r, c) {
     const cellElement = document.querySelector(`#ai-board .cell[data-r="${r}"][data-c="${c}"]`);
     if (cellElement.classList.contains('hit') || cellElement.classList.contains('miss')) return;
 
-    processAttack(aiBoard, r, c, cellElement, aiShipsState, "Player");
+    processAttack(aiBoard, r, c, cellElement, aiShipsState, "PLAYER");
     
     if (!gameOver) {
         isPlayerTurn = false;
-        document.getElementById('turn-display').innerText = "AI's Turn...";
+        document.getElementById('turn-display').innerText = "COMPUTER'S TURN...";
         setTimeout(aiTurn, 800);
     }
 }
@@ -109,7 +109,6 @@ function aiTurn() {
     if (gameOver) return;
     let r, c;
     
-    // Smart AI: Hunt if targets exist, otherwise random
     if (aiTargets.length > 0) {
         const target = aiTargets.pop();
         r = target.r;
@@ -124,13 +123,12 @@ function aiTurn() {
 
     const cellElement = document.querySelector(`#player-board .cell[data-r="${r}"][data-c="${c}"]`);
     if (cellElement.classList.contains('hit') || cellElement.classList.contains('miss')) {
-        return aiTurn(); // Retry if we randomly picked an already hit cell during target pop
+        return aiTurn(); 
     }
 
-    const hitResult = processAttack(playerBoard, r, c, cellElement, playerShipsState, "AI");
+    const hitResult = processAttack(playerBoard, r, c, cellElement, playerShipsState, "COMPUTER");
     
     if (hitResult === "hit") {
-        // Add adjacent cells to targets
         const adjacent = [{r: r-1, c}, {r: r+1, c}, {r, c: c-1}, {r, c: c+1}];
         adjacent.forEach(adj => {
             if (adj.r >= 0 && adj.r < BOARD_SIZE && adj.c >= 0 && adj.c < BOARD_SIZE) {
@@ -141,7 +139,7 @@ function aiTurn() {
 
     if (!gameOver) {
         isPlayerTurn = true;
-        document.getElementById('turn-display').innerText = "Your Turn";
+        document.getElementById('turn-display').innerText = "YOUR TURN";
     }
 }
 
@@ -152,15 +150,15 @@ function processAttack(board, r, c, cellElement, shipsState, attacker) {
         shipsState[shipName].hits++;
         
         if (shipsState[shipName].hits === shipsState[shipName].size) {
-            document.getElementById('status-message').innerText = `${attacker} sunk a ${shipName}!`;
+            document.getElementById('status-message').innerText = `${attacker} SUNK A ${shipName.toUpperCase()}!`;
             checkWinCondition(shipsState, attacker);
         } else {
-            document.getElementById('status-message').innerText = `${attacker} scored a hit!`;
+            document.getElementById('status-message').innerText = `${attacker} SCORED A HIT!`;
         }
         return "hit";
     } else {
         cellElement.classList.add('miss');
-        document.getElementById('status-message').innerText = `${attacker} missed.`;
+        document.getElementById('status-message').innerText = `${attacker} MISSED.`;
         return "miss";
     }
 }
@@ -169,7 +167,7 @@ function checkWinCondition(shipsState, attacker) {
     const allSunk = Object.values(shipsState).every(ship => ship.hits === ship.size);
     if (allSunk) {
         document.getElementById('status-message').innerText = `${attacker} WINS THE GAME!`;
-        document.getElementById('turn-display').innerText = "Game Over";
+        document.getElementById('turn-display').innerText = "GAME OVER";
         gameOver = true;
     }
 }
